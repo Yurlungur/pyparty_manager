@@ -36,42 +36,36 @@ def print_dic(dictionary):
 def initiative():
     "Roll initiative for the party."
     initiatives = pp.roll_att('INITIATIVE')
-    print("Result\tBonus")
     print_dic(initiatives)
     return initiatives
 
 def spot():
     "Roll spot checks for the party."
     spots = pp.roll_skill('SPOT')
-    print("Result\tBonus")
     print_dic(spots)
     return spots
 
 def listen():
     "Roll listen checks for the party."
     listens = pp.roll_skill('LISTEN')
-    print("Result\tBonus")
     print_dic(listens)
     return listens
 
 def search():
     "Roll search checks for the party."
     searches = pp.roll_skill('SEARCH')
-    print("Result\tBonus")
     print_dic(searches)
     return searches
 
 def hide():
     "Roll hide checks for the whole party."
     hides = pp.roll_skill('HIDE')
-    print("Result\tBonus")
     print_dic(hides)
     return hides
 
 def move_silently():
     "Move silently for the whole party."
     silents = pp.roll_skill('MOVE SILENTLY')
-    print("Result\tBonus")
     print_dic(silents)
     return silents
 
@@ -81,7 +75,7 @@ def list_attacks(charname):
 
 def make_attack(charname,attackname):
     "Make an attack using a character and an attack."
-    pp.members[charname].ATTACKS[attackname].make_attack()
+    return pp.members[charname].ATTACKS[attackname].make_attack()
     
 
 

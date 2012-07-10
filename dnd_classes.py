@@ -15,10 +15,6 @@ import characters # Characters
 
 class weapon:
     """A class that holds information about a D&D weapon."""
-    bonus = []
-    damage = []
-    crit_range = []
-    crit_multiplier = []
     # Constructor
     def __init__(self,bonus,damage,crit_range,crit_multiplier):
         "Makes an instance of the weapon class."
@@ -50,9 +46,9 @@ class weapon:
 
 class character:
     """"A D&D Character. Has a number of attributes.
-    By default, a character has empty attributes."""
+    By default, a character has empty attributes.
     # A list of abilities a character can have.
-    abilities = ['STR','DEX','CON','INT','WIS','CHA']
+    self.abilities = ['STR','DEX','CON','INT','WIS','CHA']
     # Ability modifiers
     STR = 'EMPTY'
     DEX = 'EMPTY'
@@ -67,17 +63,17 @@ class character:
     WILL = 'EMPTY'
     # Armor class 
     AC = {'FULL':'EMPTY',
-          'TOUCH':'EMPTY',
-          'FLAT-FOOTED':'EMPTY'}
+               'TOUCH':'EMPTY',
+               'FLAT-FOOTED':'EMPTY'}
     BA = 'EMPTY'
     GRA = 'EMPTY'
     INITIATIVE = 'EMPTY'
     # Attacks
-    ATTACKS = {}
+    self.ATTACKS = {}
     def get_attacks(self):
         return self.ATTACKS.keys()
     # Skills
-    SKILLS = {}
+    SKILLS = {}"""
     def get_skills(self):
         return self.SKILLS.keys()
 
@@ -100,17 +96,26 @@ class character:
                       'SKILLS':self.SKILLS}
         return attributes[attribute_name]
 
+        
     # Roll an attribute
     def roll(self,attribute_name):
         attribute = self.map(attribute_name)
         return [dice.roll_1dx(20) + attribute,attribute]
-
+    
     # Constructor. Reads info from a charstats file in characters module.
     def __init__(self,charstats):
+        # Empty attributes we need
+        self.abilities = ['STR','DEX','CON','INT','WIS','CHA']
+        self.saves = ['FORT','REF','WILL']
+        self.AC = {}
+        self.SKILLS = {}
+        self.ATTACKS = {}
+
         # Ability modifies
         self.STR = charstats['ABILITIES']['STR']
         self.DEX = charstats['ABILITIES']['DEX']
         self.CON = charstats['ABILITIES']['CON']
+        self.INT = charstats['ABILITIES']['INT']
         self.WIS = charstats['ABILITIES']['WIS']
         self.CHA = charstats['ABILITIES']['CHA']
 
@@ -143,10 +148,10 @@ class character:
             self.SKILLS[i] = charstats['SKILLS'][i]
 
 
+
+
 class party:
     "The party."
-    members = {}
-    
     # Roll an attribute for the entire party. Takes a string as input.
     def roll_att(self,attribute):
         rolls = {}
@@ -166,13 +171,14 @@ class party:
             if skill in c_skills.keys():
                 c_skill = c_skills[skill]
             else:
-                c_skill = character.map(skill_map[skill])
+                c_skill = character.map(characters.skill_map[skill])
             rolls[i] = [dice.roll_1dx(20) + c_skill, c_skill]
         return rolls
 
     # Make the party. Takes a dictionary as input. The keys are
     # character names, the values are stat blocks.
     def __init__(self, character_hash):
+        self.members = {}
         for i in character_hash.keys():
             self.members[i] = character(character_hash[i])
 
