@@ -1,8 +1,13 @@
 pyparty_manager
+Author: Jonah Miller (jonah.miller@colorado.edu)
+Licensed under the GNU Public License
+
 A party management system for D&D written in python.
 Works only in command line. Best in ipython with python 3.
 From within ipython run
 from party_manager import *
 Initializes the characters under characters.py immediately.
+
+
 
 TODO: Fix weird bug with dictionaries mixing in classes.
