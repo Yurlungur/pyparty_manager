@@ -63,3 +63,8 @@ every character.
 
 Other nice shortcuts are:
 initiative(),spot(),listen(),search(),hide(), and move_silently().
+
+
+The party class has similar abilities to the top level functions. You
+can use it to segregate characters into several parties, for managing
+a battle for instance.

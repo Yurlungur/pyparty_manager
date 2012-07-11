@@ -11,15 +11,15 @@ def roll_1dx(x):
 
 def roll_ndm(n, m):
     resultlist = []
-    for i in range(m):
-        resultlist.append(roll_1dx(n))
+    for i in range(n):
+        resultlist.append(roll_1dx(m))
     print("results...")
     print(resultlist)
     return resultlist
 
 def sum_ndm(n,m):
     resultlist = []
-    for i in range(m):
-        resultlist.append(roll_1dx(n))
+    for i in range(n):
+        resultlist.append(roll_1dx(m))
     result = sum(resultlist)
     return result

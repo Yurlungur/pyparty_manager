@@ -9,10 +9,52 @@
 
 # GNU License
 
-import dice # Dice roller
-import characters # Characters
+import dice   # Dice roller
+import copy
 #import numpy as np
 
+# A map of skills to character attributes. In case someone doesn't
+# have a skill. Does not test whether trained or untrained.
+# TODO: impliment untrained skill error handling
+skill_map = {'APPRAISE':'INT',
+             'BALANCE':'DEX',
+             'BLUFF':'CHA',
+             'CLIMB':'STR',
+             'CONCENTRATION':'CON',
+             'CRAFT':'INT',
+             'DECIPHER SCRIPT':'INT',
+             'DIPLOMACY':'CHA',
+             'DISABLE DEVICE':'INT',
+             'DISGUISE':'CHA',
+             'ESCAPE ARTIST':'DEX',
+             'FORGERY':'INT',
+             'GATHER INFORMATION':'CHA',
+             'HANDLE ANIMAL':'CHA',
+             'HEAL':'WIS',
+             'HIDE':'DEX',
+             'INTIMIDATE':'CHA',
+             'JUMP':'STR',
+             'KNOWLEDGE':'INT',
+             'LISTEN':'WIS',
+             'MOVE SILENTLY':'DEX',
+             'OPEN LOCK':'DEX',
+             'PERFORM':'CHA',
+             'PROFESSION':'WIS',
+             'RIDE':'DEX',
+             'SEARCH':'INT',
+             'SENSE MOTIVE':'WIS',
+             'SLEIGHT OF HAND':'DEX',
+             'SPELLCRAFT':'INT',
+             'SPOT':'WIS',
+             'SURVIVAL':'WIS',
+             'SWIM':'STR',
+             'TUMBLE':'DEX',
+             'USE MAGIC DEVICE':'CHA',
+             'USE ROPE':'DEX'}
+
+
+
+# Classes
 class weapon:
     """A class that holds information about a D&D weapon."""
     # Constructor
@@ -38,7 +80,7 @@ class weapon:
         for i in range(len(attack_roll)):
             if attack_roll[i] >= self.crit_range:
                 # TODO: make it roll for multiplier
-                attack_damage[i] *= self.crit_multiplier
+                attack_damage[i] += sum([dice.sum_ndm(damage[0],damage[1])+damage[2] for i in range(self.crit_multiplier-1)])
         
         # Return roll resuts
         return [attack_roll,attack_damage]
@@ -98,12 +140,63 @@ class character:
 
         
     # Roll an attribute
-    def roll(self,attribute_name):
+    def roll_att(self,attribute_name):
+        """Rolls an attribute for a single character. Works only for
+        attributes, not skills! 
+
+        Returns:
+        [result,bonus]"""
         attribute = self.map(attribute_name)
         return [dice.roll_1dx(20) + attribute,attribute]
     
+    # Roll a skill
+    def roll_skill(self,skill_name):
+        """Rolls a skill for a single character. Accepts a string.
+
+        Returns:
+        [result,bonus]
+        """
+        # If the skill is something the character has trained in, it's
+        # in the dictionary defined by the self.SKILLS attribute. Just
+        # use it.
+        if skill_name in self.SKILLS.keys():
+            skill = self.SKILLS[skill_name]
+        # If the character is not trained in the skill, then assume
+        # it's the character's ability modifier.
+        else:
+            skill = self.map(skill_map[skill_name])
+        return [dice.roll_1dx(20) + skill, skill]
+
+    # Constructor. Makes an empty class.
+    def __init__(self):
+        # Empty attributes we need
+        self.name = 'unknown'
+        self.abilities = ['STR','DEX','CON','INT','WIS','CHA']
+        self.saves = ['FORT','REF','WILL']
+        self.AC = {}
+        self.SKILLS = {}
+        self.ATTACKS = {}
+        
+        # Empty ability modifiers
+        self.STR = 0
+        self.DEX = 0
+        self.CON = 0
+        self.INT = 0
+        self.WIS = 0
+        self.CHA = 0
+
+        # Empty saves
+        self.FORT = 0
+        self.REF = 0
+        self.WILL = 0
+
+        # Empty base attack bonus/initiative
+        self.BA = 0
+        self.GRA = 0
+        self.INITIATIVE = 0
+                
     # Constructor. Reads info from a charstats file in characters module.
-    def __init__(self,charstats):
+    def read_from_dict(self,charstats):
         # Empty attributes we need
         self.abilities = ['STR','DEX','CON','INT','WIS','CHA']
         self.saves = ['FORT','REF','WILL']
@@ -112,6 +205,7 @@ class character:
         self.ATTACKS = {}
 
         # Ability modifies
+        self.name = charstats['NAME']
         self.STR = charstats['ABILITIES']['STR']
         self.DEX = charstats['ABILITIES']['DEX']
         self.CON = charstats['ABILITIES']['CON']
@@ -155,30 +249,27 @@ class party:
     # Roll an attribute for the entire party. Takes a string as input.
     def roll_att(self,attribute):
         rolls = {}
-        for i in self.members.keys():
-            charname = i
-            character = self.members[i]
-            c_attribute = character.map(attribute)
-            rolls[i] = [dice.roll_1dx(20) + c_attribute,c_attribute]
+        for i in self.members:
+            charname = i.name
+            c_attribute = i.map(attribute)
+            rolls[charname] = [dice.roll_1dx(20) + c_attribute,c_attribute]
         return rolls
             
     # Roll a skill for the entire party. Takes a string as input. 
     def roll_skill(self,skill):
         rolls = {}
-        for i in self.members.keys():
-            character = self.members[i]
-            c_skills = character.SKILLS
+        for i in self.members:
+            charname = i.name
+            c_skills = i.SKILLS
             if skill in c_skills.keys():
                 c_skill = c_skills[skill]
             else:
-                c_skill = character.map(characters.skill_map[skill])
-            rolls[i] = [dice.roll_1dx(20) + c_skill, c_skill]
+                c_skill = i.map(skill_map[skill])
+            rolls[charname] = [dice.roll_1dx(20) + c_skill, c_skill]
         return rolls
 
     # Make the party. Takes a dictionary as input. The keys are
     # character names, the values are stat blocks.
-    def __init__(self, character_hash):
-        self.members = {}
-        for i in character_hash.keys():
-            self.members[i] = character(character_hash[i])
+    def __init__(self, character_list):
+        self.members = character_list
 
