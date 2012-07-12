@@ -21,7 +21,7 @@ emily.read_from_dict(legacy.emily)
 # Initialize new characters
 # Ali
 ali = dnd_classes.character()
-ali.name = "Ali"
+ali.NAME = "Ali"
 ali.STR = -1
 ali.DEX = 3
 ali.CON = 1
