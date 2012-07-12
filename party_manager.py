@@ -50,68 +50,149 @@ def roll_att(attribute):
     return rolls # Return the dictionary.
 
 def roll_skill(skill):
-    """Rolls an arbitrary skill for the entire party. Different from
+    """
+    Rolls an arbitrary skill for the entire party. Different from
     roll_att. Accepts a string.
     
     Returns:
     {'charname':[result,bonus],...}
     """
     rolls = {} # Represent roll per character. Use human-readable strings.
-    for i in character_list: # Character dict holds character
-                             # object strings.
-        charname = i.name # Get the key as the character name
+    for chtr in character_list: # Character dict holds character
+                                # object strings.
+        charname = chtr.name # Get the key as the character name
         # Skills for the character.
-        c_skills = i.SKILLS
+        c_skills = chtr.SKILLS
         # Skills you care about. If the skill is known by the
         # character, just access the correct skill, which is stored as
         # a value in a dictionary. Otherwise, use the generalized
         # skill map which includes ALL skills.
-        if skill in c_skills.keys():
+        if skill in list(c_skills.keys()):
             c_skill = c_skills[skill]
         else:
-            c_skill = i.map(skill_map[skill])
-        rolls[charname] = [dice.roll_1dx(20) + c_skill, c_skill] # Make the roll
-        return rolls # Return the dictionary.
+            c_skill = chtr.map(skill_map[skill])
+        # Make the roll
+        rolls[charname] = [dice.roll_1dx(20) + c_skill, c_skill] 
+    return rolls # Return the dictionary.
 
 
 def roll():
     return dice.roll_1dx(20)
 
-def initiative():
-    "Roll initiative for the party."
-    initiatives = roll_att('INITIATIVE')
-    print_dic(initiatives)
-    return initiatives
+def initiative(charlist = []):
+    """
+    Roll initiative for the party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        initiatives = roll_att('INITIATIVE')
+        print_dic(initiatives)
+        return initiatives
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = [dice.roll_1dx(20) + i.INITIATIVE, i.INITIATIVE]
+        print_dic(rolls)
+        return rolls
 
-def spot():
-    "Roll spot checks for the party."
-    spots = roll_skill('SPOT')
-    print_dic(spots)
-    return spots
+def spot(charlist = []):
+    """
+    Roll spot checks for the party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        spots = roll_skill('SPOT')
+        print_dic(spots)
+        return spots
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = i.roll_skill('SPOT')
+        print_dic(rolls)
+        return rolls
 
-def listen():
-    "Roll listen checks for the party."
-    listens = roll_skill('LISTEN')
-    print_dic(listens)
-    return listens
+def listen(charlist = []):
+    """"
+    Roll listen checks for the party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        listens = roll_skill('LISTEN')
+        print_dic(listens)
+        return listens
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = i.roll_skill('LISTEN')
+        print_dic(rolls)
+        return rolls
 
-def search():
-    "Roll search checks for the party."
-    searches = roll_skill('SEARCH')
-    print_dic(searches)
-    return searches
+def search(charlist = []):
+    """"
+    Roll search checks for the party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        searches = roll_skill('SEARCH')
+        print_dic(searches)
+        return searches
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = i.roll_skill('SEARCH')
+        print_dic(rolls)
+        return rolls
 
-def hide():
-    "Roll hide checks for the whole party."
-    hides = roll_skill('HIDE')
-    print_dic(hides)
-    return hides
+def hide(charlist = []):
+    """
+    Roll hide checks for the whole party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        hides = roll_skill('HIDE')
+        print_dic(hides)
+        return hides
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = i.roll_skill('HIDE')
+        print_dic(rolls)
+        return rolls
 
-def move_silently():
-    "Move silently for the whole party."
-    silents = roll_skill('MOVE SILENTLY')
-    print_dic(silents)
-    return silents
+def move_silently(charlist = []):
+    """
+    "Move silently for the whole party. If arguments given, do it for the
+    character list.
+    """
+    if len(charlist) == 0:
+        silents = roll_skill('MOVE SILENTLY')
+        print_dic(silents)
+        return silents
+    else:
+        rolls = {}
+        for i in charlist:
+            rolls[i.name] = i.roll_skill('MOVE SILENTLY')
+        print_dic(rolls)
+        return rolls
+
+# SAVES
+def fort():
+    "Fortitude saves for the whole party."
+    forts = roll_att('FORT')
+    print_dic(forts)
+    return forts
+
+def ref():
+    "Reflex saves for the whole party."
+    refs = roll_att('REF')
+    print_dic(refs)
+    return refs
+
+def will():
+    "Will saves for the whole party."
+    wills = roll_att('WILL')
+    print_dic(wills)
+    return wills
 
 def main():
     print("Party manager!\n Manage your party!\n A tool for DMs!")

@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+# Toplevel aliases for party management
+import legacy
+import dice
+from dnd_classes import *
+from characters import *
+from party_manager import *
+
+#Character attack aliases
+def iatk(attack_name): 
+    "Isaac attacks"
+    return isaac.ATTACKS[attack_name].make_attack()
