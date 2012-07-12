@@ -21,7 +21,7 @@ emily.read_from_dict(legacy.emily)
 # Initialize new characters
 # Ali
 ali = dnd_classes.character()
-ali.NAME = "Ali"
+ali.name = "Ali"
 ali.STR = -1
 ali.DEX = 3
 ali.CON = 1
@@ -45,7 +45,15 @@ ali.SKILLS = {'CLIMB':1,
               'DIPLOMACY':4,
               'DISABLE DEVICE':2,
               'ESCAPE ARTIST':7,
-              'GATHER INFORMATION':6}
+              'GATHER INFORMATION':6,
+              'HIDE':8,
+              'KNOWLEDGE (DUNGEONEERING)':0,
+              'LISTEN':8,
+              'MOVE SILENTLY':6,
+              'OPEN LOCK':4,
+              'SENSE MOTIVE':3,
+              'SLEIGHT OF HAND':5,
+              'SPOT':5}
 
 # Character name dictionary. Used in party class initialization:
 character_list = [isaac,paulo,emily,ali]
