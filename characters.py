@@ -39,7 +39,7 @@ ali.SAVES = {'FORT':1,
              'WILL':0}
 ali.ATTACKS = {'short sword':[[0],[1,6,0],[19,2]],
                'short bow':[[4],[1,6,0],[20,3]],
-               'FULL'::[[0],[1,6,0],[19,2]]}
+               'FULL':[[0],[1,6,0],[19,2]]}
 ali.SKILLS = {'CLIMB':1,
               'CRAFT MAKING ARROWS':0,
               'DIPLOMACY':4,
