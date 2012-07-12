@@ -79,8 +79,6 @@ class weapon:
         # Check for crits and multiply by appropriate values.
         for i in range(len(attack_roll)):
             if attack_roll[i] >= self.crit_range:
-                # Nice message:
-                print("CRITICAL HIT, BITCHES")
                 # TODO: make it roll for multiplier
                 attack_damage[i] += sum([dice.sum_ndm(damage[0],damage[1])+damage[2] for i in range(self.crit_multiplier-1)])
         

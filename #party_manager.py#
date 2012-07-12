@@ -73,10 +73,6 @@ def roll_skill(skill):
         rolls[charname] = [dice.roll_1dx(20) + c_skill, c_skill] # Make the roll
         return rolls # Return the dictionary.
 
-
-def roll():
-    return dice.roll_1dx(20)
-
 def initiative():
     "Roll initiative for the party."
     initiatives = roll_att('INITIATIVE')
