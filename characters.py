@@ -48,6 +48,6 @@ ali.SKILLS = {'CLIMB':1,
               'GATHER INFORMATION':6}
 
 # Character name dictionary. Used in party class initialization:
-character_list = [isaac,paulo,emily,ali].sort()
+character_list = [isaac,paulo,emily,ali]
 
 
